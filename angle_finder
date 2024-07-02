@@ -4,13 +4,16 @@
              #MATLAB
 HI GUYS , THIS IS JAI RAJA SARAVANAM ...... 
 IN THIS PIECE OF MATLAB CODE I GOING TO MAKE A ANGLE PREDICTOR 
-                     FOR (0,0) AND ANY ARBITRARY POINT (X,Y) 
+                     FOR (0,0) AND ANY ARBITRARY POINT (X,Y) IN FIRST QUADRANT   
                      USING MULTIPLE LINEAR REGRESSION
 
        Y_HAT = WEIGHT3 * X + WIEGHT2 * Y + WIEGHT1 * R + WIEGHT0 * 1
 
 
                    THANKS GUYS .... HAVE FUN......
+
+NOTE: I HAVE TRAINED THE NETWORK FOR DATA POINTS AT UNIT CIRCLE.
+      WHEN YOU ARE GIVING ANY POINT IN FIRST QUADRANT YOU SHOULD CONVERT THE POINT INTO THE POINTS IN UNIT CIRCLE, BY DIVIDING THE POINTS WITH ITS RADIUS
 
 %}
 
@@ -22,48 +25,34 @@ z=[];
 costsum=[];
 testing =[];
 output=[];
-for j =1:10
+mag=1;
 for i = 0:90 
-    x(end+1) = cosd(i) ;
-    y(end+1) = sind(i) ;
+    x(end+1) = mag*cosd(i) ;
+    y(end+1) = mag*sind(i) ;
 end
-end
-for k =1:10
-    for m =0:90
-        z(end+1)=k ;
-    end
-end
-%input=[x;y];
-for j =1:10
+
+
+input=[x;y];
+
 for i =0:90
     output(end+1) = i ;
-end
 end
 
 target = output;
 
-N_input= 910 ;
-N_feature = 3 ;
+N_input= 91 ;
+N_feature = 2 ;
 learning_rate =0.01 ;
 weight = zeros(1,N_feature + 1) ;
 
-input =[x ; y ;z; ones(1,size(x,2))] ;   % 2 indicates no of column ,1 will indicate no of row
+input =[x ; y ; ones(1,size(x,2))] ;   % 2 indicates no of column ,1 will indicate no of row
 
-for i= 1:300000
+for i= 1:1000000
     y_hat = weight * input ;
     error = y_hat - target ;
     cost = 1/(2*N_input)*(y_hat-target).*(y_hat-target) ;
     dcost = (1/N_input) * ( y_hat- target)* input' ;
     weight = weight - learning_rate * dcost ;
-    %
-         if mod(i,100) ==0
-             x_test = [100*0.7071 ; 100*0.7071  ;100; 1]; 
-             test_out =weight * x_test ;
-             testing(end+1) = test_out ;
-            
-         end
-    %
-    costsum(end+1) =sum(cost)/N_input ;
 end
 
 disp(weight) ;
@@ -73,12 +62,15 @@ plot(target)
 hold on
 plot(y_hat)
 legend('Real','Pred')
-hold on 
-figure
-plot(costsum)
 
 %testing
 
-x_validate = [800 ; 800  ;1131.1; 1]; 
+%x_test = [0.7071 ; 0.7071 ; 1];
+x =100 ;
+y =200 ;
+r = (x^2 +y^2)^0.5 ;
+x1 =x/r ;
+y1=y/r ;
+x_test = [x1 ;y1 ;1 ];
 %input_test =[x_test ;ones(1,size(x_test,2))] ;
-validate_out =weight * x_validate ;
+test_out =weight * x_test ;
