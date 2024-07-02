@@ -6,11 +6,6 @@ for further details see the code.
 you can also extend this code for four quadrants by giving datapoints from four quadrant
 
 
-2)LSTM(SCRATCH)
-This is an lstm code in matlab without using any inbuilt function
-For further details see my code
-
-
 
 
 For further details
